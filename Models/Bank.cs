@@ -29,11 +29,10 @@ namespace SP031122.Models
 
         public bool CreateAccount(string name, uint money, AccountType type=AccountType.Unprotected)
         {
-            Random random = new Random();
             ushort number;
             do
             {
-                number = (ushort) random.Next(0, 65535);
+                number = (ushort) Random.Shared.Next(0, 65535);
             }
             while (AccountExists(number));
 
