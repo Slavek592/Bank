@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace SP031122.Models
@@ -15,13 +16,10 @@ namespace SP031122.Models
 
         public bool AccountExists(ushort number)
         {
-            if (_accounts.Any(account => account.GetNumber() == number))
-                return true;
-            else
-                return false;
+            return _accounts.Any(account => account.GetNumber() == number);
         }
 
-        public Account FindAccount(ushort number)
+        private Account FindAccount(ushort number)
         {
             if (AccountExists(number))
                 return _accounts.First(account => account.GetNumber() == number);
@@ -29,20 +27,31 @@ namespace SP031122.Models
                 return null;
         }
 
-        public bool CreateAccount(string name, uint money)
+        public bool CreateAccount(string name, uint money, AccountType type=AccountType.Unprotected)
         {
             Random random = new Random();
             ushort number;
-            while (true)
+            do
             {
                 number = (ushort) random.Next(0, 65535);
-                if (!AccountExists(number))
-                {
-                    break;
-                }
             }
+            while (AccountExists(number));
+
             Console.WriteLine("Your number is: " + number.ToString());
-            _accounts.Add(new Account(name, number, money));
+            if (type == AccountType.Protected)
+                _accounts.Add(new ProtectedAccount(name, number, money));
+            else if (type == AccountType.InterestEarning)
+                _accounts.Add(new InterestEarningAccount(name, number, money));
+            else if (type == AccountType.GiftCard)
+                _accounts.Add(new GiftCardAccount(name, number, money,
+                    QuestionsLists.GetUInt("How much money would You like" +
+                                           " to put there every month?"),
+                    QuestionsLists.GetByte("For how many more months (except the first one)" +
+                                           " would You like to pay the gift card?")));
+            else if (type == AccountType.LineOfCredit)
+                _accounts.Add(new LineOfCreditAccount(name, number, money));
+            else
+                _accounts.Add(new Account(name, number, money));
             return true;
         }
 
@@ -50,7 +59,7 @@ namespace SP031122.Models
         {
             Account account = FindAccount(number);
             if (account != null)
-                return account.Deposit(money, transactionName);
+                return Deposit(account, money, transactionName);
             else
                 return false;
         }
@@ -69,7 +78,7 @@ namespace SP031122.Models
         {
             Account account = FindAccount(number);
             if (account != null)
-                return account.Statement();
+                return Statement(account);
             else
                 return false;
         }
@@ -83,7 +92,7 @@ namespace SP031122.Models
         {
             Account account = FindAccount(number);
             if (account != null)
-                return account.Withdrawal(money, transactionName);
+                return Withdrawal(account, money, transactionName);
             else
                 return false;
         }
@@ -111,28 +120,56 @@ namespace SP031122.Models
             Account accountFrom = FindAccount(numberFrom);
             Account accountTo = FindAccount(numberTo);
             if ((accountFrom != null) && (accountTo != null))
-            {
-                if (accountFrom.TransferFrom(money, transactionName))
-                {
-                    if (accountTo.TransferTo(money, transactionName))
-                        return true;
-                    else
-                    {
-                        accountFrom.Deposit(money, transactionName + " - cancel");
-                        return false;
-                    }
-                }
-                else
-                    return false;
-            }
+                return Transfer(accountFrom, accountTo, money, transactionName);
             else
                 return false;
         }
 
-        /*private uint RandomUint()
+        public bool NewMonth()
         {
-            Random random = new Random();
-            return (uint) (random.Next(Int32.MaxValue) << 16) | (uint) random.Next(Int32.MaxValue);
-        }*/
+            Console.WriteLine("Please, wait, accounts updating.");
+            List<Account> accountsToDelete = new List<Account>();
+            foreach (Account account in _accounts)
+            {
+                if (!account.NewMonth())
+                    accountsToDelete.Add(account);
+            }
+            foreach (Account account in accountsToDelete)
+            {
+                _accounts.Remove(account);
+            }
+            return true;
+        }
+
+        public bool Save(DateTime time)
+        {
+            StreamWriter file = new StreamWriter(
+                "/home/slava/RiderProjects/SemPrg2/SP-3-11-22/Data/Accounts.txt");
+            file.WriteLine(time.ToString());
+            foreach (Account account in _accounts)
+            {
+                file.WriteLine(account.GetNumber().ToString());
+                account.Save();
+            }
+            file.WriteLine("!  end  !");
+            file.Close();
+            return true;
+        }
+
+        public DateTime Load()
+        {
+            StreamReader file = new StreamReader(
+                "/home/slava/RiderProjects/SemPrg2/SP-3-11-22/Data/Accounts.txt");
+            DateTime time = DateTime.Parse(file.ReadLine().Replace("_", " "));
+            while (true)
+            {
+                string data = file.ReadLine();
+                if (data == "!  end  !")
+                    break;
+                else
+                    _accounts.Add(Account.Load(UInt16.Parse(data)));
+            }
+            return time;
+        }
     }
 }

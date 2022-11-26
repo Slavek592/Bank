@@ -4,7 +4,8 @@ namespace SP031122.Models
     {
         Deposit,
         Withdrawal,
-        TransferFrom,
-        TransferTo
+        Transfer,
+        Payment,
+        MonthlyInterest
     }
 }

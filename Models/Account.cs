@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace SP031122.Models
 {
     public class Account
     {
-        private readonly string _name;
-        private readonly ushort _number;
-        private uint _money;
-        private List<Transaction> _memory;
+        protected string _name;
+        protected ushort _number;
+        protected uint _money;
+        protected List<Transaction> _memory;
 
         public Account(string name, ushort number, uint money)
         {
@@ -16,7 +17,34 @@ namespace SP031122.Models
             _number = number;
             _money = 0;
             _memory = new List<Transaction>();
-            Deposit(money, "Initial deposit");
+            InitialDeposit(money);
+        }
+
+        private Account(ushort number)
+        {
+            _number = number;
+            StreamReader file = new StreamReader(
+                "/home/slava/RiderProjects/SemPrg2/SP-3-11-22/Data/"
+                + number.ToString() + ".txt");
+            file.ReadLine();
+            _name = file.ReadLine();
+            _money = UInt32.Parse(file.ReadLine());
+            _memory = new List<Transaction>();
+            while (true)
+            {
+                string data = file.ReadLine();
+                if (data == "!  end  !")
+                    break;
+                else
+                    _memory.Add(Transaction.Load(data));
+            }
+            file.Close();
+        }
+
+        protected Account()
+        {
+            _money = 0;
+            _memory = new List<Transaction>();
         }
 
         public string GetName()
@@ -28,36 +56,55 @@ namespace SP031122.Models
         {
             return _number;
         }
-        
-        public bool Deposit(uint money, string transactionName)
-        {
-            return AddMoney(money, transactionName, TransactionType.Deposit);
-        }
-        public bool AddMoney(uint money, string transactionName, TransactionType transactionType)
-        {
-            _money += money;
-            _memory.Add(new Transaction(money, transactionName, transactionType));
-            return true;
-        }
 
-        public bool Withdrawal(uint money, string transactionName)
+        protected bool InitialDeposit(uint money)
         {
-            return TakeMoney(money, transactionName, TransactionType.Withdrawal);
+            return Deposit(money, "Initial deposit");
         }
-        
-        public bool TakeMoney(uint money, string transactionName, TransactionType transactionType)
+        public virtual bool Deposit(uint money, string transactionName)
         {
-            if (_money >= money)
+            if (AddMoney(money, transactionName, TransactionType.Deposit))
             {
-                _money -= money;
-                _memory.Add(new Transaction(money, transactionName, transactionType));
+                MoneySimulator.InputMoney(money);
                 return true;
             }
             else
                 return false;
         }
+        protected bool AddMoney(uint money, string transactionName, TransactionType transactionType)
+        {
+            _money += money;
+            _memory.Add(new Transaction(money, transactionName, transactionType, true));
+            return true;
+        }
 
-        public bool Statement()
+        public virtual bool Withdrawal(uint money, string transactionName)
+        {
+            if (TakeMoney(money, transactionName, TransactionType.Withdrawal))
+            {
+                MoneySimulator.OutputMoney(money);
+                return true;
+            }
+            else
+                return false;
+        }
+        
+        protected bool TakeMoney(uint money, string transactionName, TransactionType transactionType)
+        {
+            if (_money >= money)
+            {
+                _money -= money;
+                _memory.Add(new Transaction(money, transactionName, transactionType, false));
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Not enough resources.");
+                return false;
+            }
+        }
+
+        public virtual bool Statement()
         {
             Console.WriteLine();
             Console.WriteLine(_name);
@@ -71,14 +118,61 @@ namespace SP031122.Models
             return true;
         }
 
-        public bool TransferTo(uint money, string transactionName)
+        public virtual bool TransferTo(uint money, string transactionName)
         {
-            return AddMoney(money, transactionName, TransactionType.TransferTo);
+            return AddMoney(money, transactionName, TransactionType.Transfer);
         }
         
-        public bool TransferFrom(uint money, string transactionName)
+        public virtual bool TransferFrom(uint money, string transactionName)
         {
-            return TakeMoney(money, transactionName, TransactionType.TransferFrom);
+            Console.WriteLine("Sending money...");
+            return TakeMoney(money, transactionName, TransactionType.Transfer);
+        }
+
+        public virtual bool NewMonth()
+        {
+            return true;
+        }
+
+        public virtual bool Save()
+        {
+            StreamWriter file = new StreamWriter(
+                "/home/slava/RiderProjects/SemPrg2/SP-3-11-22/Data/"
+                + _number.ToString() + ".txt");
+            file.WriteLine("Unprotected");
+            file.WriteLine(_name);
+            file.WriteLine(_money.ToString());
+            foreach (Transaction transaction in _memory)
+            {
+                file.WriteLine(transaction.Data());
+            }
+            file.WriteLine("!  end  !");
+            file.Close();
+            return true;
+        }
+
+        public static Account Load(ushort number)
+        {
+            StreamReader file = new StreamReader(
+                "/home/slava/RiderProjects/SemPrg2/SP-3-11-22/Data/"
+                + number.ToString() + ".txt");
+            AccountType type = Enum.Parse<AccountType>(file.ReadLine());
+            file.Close();
+            if (type == AccountType.Protected)
+                return ProtectedAccount.LoadProtected(number);
+            else if (type == AccountType.InterestEarning)
+                return InterestEarningAccount.LoadInterestEarning(number);
+            else if (type == AccountType.GiftCard)
+                return GiftCardAccount.LoadGiftCard(number);
+            else if (type == AccountType.LineOfCredit)
+                return LineOfCreditAccount.LoadLineOfCredit(number);
+            else
+                return Account.LoadUnprotected(number);
+        }
+
+        public static Account LoadUnprotected(ushort number)
+        {
+            return new Account(number);
         }
     }
 }
