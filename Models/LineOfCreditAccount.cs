@@ -99,15 +99,15 @@ namespace SP031122.Models
 
         private bool IncreaseDebt(uint money, string transactionName, TransactionType transactionType)
         {
-            if ((_debt < _limit) & (money + _debt > _limit))
+            _memory.Add(new Transaction(money, transactionName + " (going into debt)",
+                transactionType, false));
+            _debt += money;
+            if (_debt > _limit)
             {
                 _debt += 20;
                 _memory.Add(new Transaction(20, "Limit exceeded",
                     TransactionType.Payment, false));
             }
-            _debt += money;
-            _memory.Add(new Transaction(money, transactionName + " (going into debt)",
-                transactionType, false));
             return true;
         }
 
