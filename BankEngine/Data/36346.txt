@@ -1,0 +1,29 @@
+LineOfCredit
+Not Nice
+0
+83
+test
+Initial_deposit Deposit True 0 11/26/2022_9:37:52_PM
+It_looks_like_I_need_the_money Withdrawal False 0 11/26/2022_9:39:07_PM
+It_looks_like_I_need_the_money_(going_into_debt) Withdrawal False 6000 11/26/2022_9:39:07_PM
+Limit_exceeded Payment False 20 11/26/2022_9:39:07_PM
+Bye_a_coffee Withdrawal False 0 11/26/2022_9:39:45_PM
+Bye_a_coffee_(going_into_debt) Withdrawal False 75 11/26/2022_9:39:45_PM
+Limit_exceeded Payment False 20 11/26/2022_9:39:45_PM
+And_now_I_have_the_money_again_(paying_debt) Deposit True 6000 11/26/2022_9:41:15_PM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 2 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 3 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 3 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 3 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 3 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 3 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Debt_monthly_interest_(going_into_debt) MonthlyInterest False 4 6/18/2023_11:53:44_AM
+Monthly_payment_(going_into_debt) Payment False 5 6/18/2023_11:53:44_AM
+Deposit_(paying_debt) Deposit True 88 6/18/2023_1:31:56_PM
+!  end  !

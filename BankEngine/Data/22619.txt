@@ -1,0 +1,23 @@
+InterestEarning
+Nice
+6330
+TeSt
+Initial_deposit Deposit True 127 11/26/2022_5:11:29_PM
+Some_money_to_make_more_money Deposit True 223 11/26/2022_9:22:53_PM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+Monthly_interest MonthlyInterest True 0 6/18/2023_11:53:44_AM
+Monthly_payment Payment False 5 6/18/2023_11:53:44_AM
+MORE_MONEY Deposit True 6000 6/18/2023_12:47:52_PM
+Deposit Deposit True 15 6/18/2023_1:27:18_PM
+!  end  !
