@@ -98,22 +98,22 @@ namespace BankEngine.Models
             }
             else
             {
-                Console.WriteLine("Not enough resources.");
+                QuestionsLists.IIO.WriteString("Not enough resources.");
                 return false;
             }
         }
 
         public virtual bool Statement()
         {
-            Console.WriteLine();
-            Console.WriteLine(_name);
-            Console.WriteLine("Money: " + _money.ToString());
-            Console.WriteLine("Transactions:");
+            QuestionsLists.IIO.WriteString("");
+            QuestionsLists.IIO.WriteString(_name);
+            QuestionsLists.IIO.WriteString("Money: " + _money.ToString());
+            QuestionsLists.IIO.WriteString("Transactions:");
             foreach (Transaction transaction in _memory)
             {
                 transaction.Write();
             }
-            Console.WriteLine();
+            QuestionsLists.IIO.WriteString("");
             return true;
         }
 
@@ -125,7 +125,7 @@ namespace BankEngine.Models
         
         public virtual bool TransferFrom(uint money, string transactionName)
         {
-            Console.WriteLine("Sending money...");
+            QuestionsLists.IIO.WriteString("Sending money...");
             return TakeMoney(money, transactionName, TransactionType.Transfer);
         }
 

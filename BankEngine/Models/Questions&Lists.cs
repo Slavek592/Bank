@@ -6,10 +6,12 @@ namespace BankEngine.Models
 {
     public static class QuestionsLists
     {
+        public static IIOProvider IIO = new ConsoleIOProvider();
+        
         public static string GetAnswer(string question)
         {
-            Console.WriteLine(question);
-            return Console.ReadLine();
+            IIO.WriteString(question);
+            return IIO.GetString();
         }
 
         public static ushort GetUShort(string question)
@@ -23,7 +25,7 @@ namespace BankEngine.Models
                 }
                 catch
                 {
-                    Console.WriteLine("It was not a correct answer, try one more time.");
+                    IIO.WriteString("It was not a correct answer, try one more time.");
                 }
             }
         }
@@ -39,7 +41,7 @@ namespace BankEngine.Models
                 }
                 catch
                 {
-                    Console.WriteLine("It was not a correct answer, try one more time.");
+                    IIO.WriteString("It was not a correct answer, try one more time.");
                 }
             }
         }
@@ -54,15 +56,15 @@ namespace BankEngine.Models
                 }
                 catch
                 {
-                    Console.WriteLine("It was not a correct answer, try one more time.");
+                    IIO.WriteString("It was not a correct answer, try one more time.");
                 }
             }
         }
 
         public static bool YesNo(string question)
         {
-            Console.WriteLine(question);
-            string answer = Console.ReadLine().ToLower();
+            IIO.WriteString(question);
+            string answer = IIO.GetString().ToLower();
             string[] strings = {"y", "yes", "yes.", "t", "true"};
             if (strings.ToList().Contains(answer))
                 return true;
@@ -83,11 +85,11 @@ namespace BankEngine.Models
                     if (moneyList.Contains(result))
                         return result;
                     else
-                        Console.WriteLine("It is fake money.");
+                        IIO.WriteString("It is fake money.");
                 }
                 catch
                 {
-                    Console.WriteLine("It is not money.");
+                    IIO.WriteString("It is not money.");
                 }
             }
         }

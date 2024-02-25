@@ -37,7 +37,7 @@ namespace BankEngine.Models
             else
                 s += "-";
             s += _money.ToString() + " (" + _time.ToString() + ")";
-            Console.WriteLine(s);
+            QuestionsLists.IIO.WriteString(s);
             return true;
         }
 

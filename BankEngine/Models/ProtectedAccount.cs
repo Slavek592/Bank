@@ -10,8 +10,8 @@ namespace BankEngine.Models
         public ProtectedAccount(string name, ushort number, uint money)
             : base(name, number, money)
         {
-            Console.WriteLine("Create a new password.");
-            _password = Console.ReadLine();
+            QuestionsLists.IIO.WriteString("Create a new password.");
+            _password = QuestionsLists.IIO.GetString();
         }
 
         public ProtectedAccount(string name, ushort number, uint money, string password)
@@ -45,8 +45,8 @@ namespace BankEngine.Models
 
         public override bool Withdrawal(uint money, string transactionName)
         {
-            Console.WriteLine("Write Your password.");
-            return Withdrawal(money, transactionName, Console.ReadLine());
+            QuestionsLists.IIO.WriteString("Write Your password.");
+            return Withdrawal(money, transactionName, QuestionsLists.IIO.GetString());
         }
 
         public bool Withdrawal(uint money, string transactionName, string password)
@@ -63,72 +63,72 @@ namespace BankEngine.Models
             }
             else
             {
-                Console.WriteLine("Wrong password.");
+                QuestionsLists.IIO.WriteString("Wrong password.");
                 return false;
             }
         }
 
         public override bool TransferFrom(uint money, string transactionName)
         {
-            Console.WriteLine("Write Your password.");
-            return TransferFrom(money, transactionName, Console.ReadLine());
+            QuestionsLists.IIO.WriteString("Write Your password.");
+            return TransferFrom(money, transactionName, QuestionsLists.IIO.GetString());
         }
 
         public bool TransferFrom(uint money, string transactionName, string password)
         {
             if (_password == password)
             {
-                Console.WriteLine("Sending money...");
+                QuestionsLists.IIO.WriteString("Sending money...");
                 return TakeMoney(money, transactionName, TransactionType.Transfer);
             }
             else
             {
-                Console.WriteLine("Wrong password.");
+                QuestionsLists.IIO.WriteString("Wrong password.");
                 return false;
             }
         }
 
         public override bool Statement()
         {
-            Console.WriteLine("Write Your password.");
-            return Statement(Console.ReadLine());
+            QuestionsLists.IIO.WriteString("Write Your password.");
+            return Statement(QuestionsLists.IIO.GetString());
         }
 
         public virtual bool Statement(string password)
         {
             if (_password == password)
             {
-                Console.WriteLine();
-                Console.WriteLine(_name);
-                Console.WriteLine("Money: " + _money.ToString());
-                Console.WriteLine("Transactions:");
+                QuestionsLists.IIO.WriteString("");
+                QuestionsLists.IIO.WriteString(_name);
+                QuestionsLists.IIO.WriteString("Money: " + _money.ToString());
+                QuestionsLists.IIO.WriteString("Transactions:");
                 foreach (Transaction transaction in _memory)
                 {
                     transaction.Write();
                 }
-                Console.WriteLine();
+                QuestionsLists.IIO.WriteString("");
                 return true;
             }
             else
             {
-                Console.WriteLine("Wrong password.");
+                QuestionsLists.IIO.WriteString("Wrong password.");
                 return false;
             }
         }
 
         public bool ChangePassword()
         {
-            Console.WriteLine("Write Your password.");
-            if (_password == Console.ReadLine())
+            QuestionsLists.IIO.WriteString("Write Your password.");
+            if (_password == QuestionsLists.IIO.GetString())
             {
-                Console.WriteLine("Write a new password.");
-                _password = Console.ReadLine();
-                Console.WriteLine("Password changed.");
+                QuestionsLists.IIO.WriteString("Write a new password.");
+                _password = QuestionsLists.IIO.GetString();
+                QuestionsLists.IIO.WriteString("Password changed.");
                 return true;
             }
             else
             {
-                Console.WriteLine("Wrong password.");
+                QuestionsLists.IIO.WriteString("Wrong password.");
                 return false;
             }
         }

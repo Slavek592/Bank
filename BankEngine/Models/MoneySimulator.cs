@@ -9,7 +9,7 @@ namespace BankEngine.Models
             uint given = 0;
             while (given < money)
             {
-                Console.WriteLine((money - given).ToString() + " remains");
+                QuestionsLists.IIO.WriteString((money - given).ToString() + " remains");
                 given += QuestionsLists.GetMoney();
             }
 
@@ -21,12 +21,13 @@ namespace BankEngine.Models
 
         public static bool OutputMoney(uint money)
         {
-            Console.WriteLine("Here You have the money:");
+            QuestionsLists.IIO.WriteString("Here You have the money:");
+            string s = "";
             for (int i = 0; i < money; i++)
             {
-                Console.Write("( 1 )");
+                s+="( 1 )";
             }
-            Console.WriteLine();
+            QuestionsLists.IIO.WriteString(s);
             
             return true;
         }
