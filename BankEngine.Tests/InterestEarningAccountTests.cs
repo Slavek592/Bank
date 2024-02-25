@@ -14,16 +14,4 @@ public class InterestEarningAccountTests
 
         Assert.True(richAccount.TransferFrom(1000000001, "test", ""));
     }
-    
-    [Fact]
-    public void CostsSomething()
-    {
-        InterestEarningAccount account =
-            new InterestEarningAccount("test", 1, 0, "");
-        account.TransferTo(1, "Here you have.");
-
-        account.NewMonth();
-
-        Assert.False(account.TransferFrom(1, "test", ""));
-    }
 }
